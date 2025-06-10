@@ -1,4 +1,4 @@
-import Agenda from "@/app/models/agendas.model";
+import { Agenda } from "@/app/models";
 import { AgendaCreateInput } from "../interfaces/agenda.interface";
 
 const agendaMutation = {
