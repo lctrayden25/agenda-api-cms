@@ -1,5 +1,7 @@
-import { Agenda } from "@/app/models";
+import { Agenda } from "@/models";
 import { AgendaCreateInput } from "../interfaces/agenda.interface";
+import dbConnect from "@/config/dbConnct";
+import { generateCode } from "@/utils/helper";
 
 const agendaMutation = {
 	agendaCreate: async (
@@ -8,11 +10,14 @@ const agendaMutation = {
 		// _context: unknown,
 		// _info: unknown
 	) => {
+		await dbConnect();
+
+		const randomCode = generateCode(7);
 		const { title, description } = args;
 		const data = await Agenda.insertOne({
 			title,
 			description,
-			code: `CODE${new Date().getTime()}`,
+			code: randomCode,
 		});
 
 		return data;

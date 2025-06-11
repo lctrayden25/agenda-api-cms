@@ -1,4 +1,4 @@
-import { Agenda } from "@/app/models";
+import { Agenda } from "@/models";
 import { AgendaGetInput } from "../interfaces/agenda.interface";
 
 const agendaQuery = {
