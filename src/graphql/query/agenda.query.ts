@@ -1,10 +1,16 @@
 import { Agenda } from "@/models";
 import { AgendaGetInput } from "../interfaces/agenda.interface";
+import dbConnect from "@/config/dbConnect";
 
 const agendaQuery = {
 	agendaList: async () => {
-		const data = await Agenda.find();
-		return data;
+		await dbConnect();
+		try {
+			const data = await Agenda.find();
+			return data;
+		} catch (error) {
+			console.log(error);
+		}
 	},
 	agendaGet: async (
 		_parent: unknown,
@@ -12,9 +18,14 @@ const agendaQuery = {
 		// _context: unknown,
 		// _info: unknown
 	) => {
-		const { id } = args;
-		const data = await Agenda.findOne({ _id: id });
-		return data;
+		await dbConnect();
+		try {
+			const { id } = args;
+			const data = await Agenda.findOne({ _id: id });
+			return data;
+		} catch (error) {
+			console.log(error);
+		}
 	},
 };
 

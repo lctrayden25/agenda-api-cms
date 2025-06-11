@@ -1,23 +1,60 @@
 import gql from "graphql-tag";
 
 const typeDefs = gql`
+	scalar Date
+	scalar JSON
+
+	# type Error {
+	# 	message: String
+	# 	code: String
+	# 	httpStatus: Int
+	# 	timestamp: Date
+	# }
+
+	type AgendaItem {
+		id: ID
+		title: String!
+		description: String!
+	}
+
+	input AgendaItemInput {
+		title: String!
+		description: String!
+	}
+
+	input AgendaCreateInput {
+		isActive: Boolean
+		startDate: Date
+		endDate: Date
+		items: [AgendaItemInput!]
+	}
+
+	input AgendaUpdateInput {
+		isActive: Boolean
+		startDate: Date
+		endDate: Date
+		items: [AgendaItemInput!]
+	}
+
 	type Agenda {
 		id: ID!
 		code: String
-		title: String
-		description: String
-		createdAt: String
-		updatedAt: String
+		isActive: Boolean
+		items: [AgendaItem!]
+		createdAt: Date
+		updatedAt: Date
+		startDate: Date
+		endDate: Date
 	}
 
 	type Query {
-		agendaList: [Agenda]
+		agendaList: [Agenda!]
 		agendaGet(id: ID!): Agenda
 	}
 
 	type Mutation {
-		agendaCreate(title: String!, description: String): Agenda
-		agendaUpdate(id: ID!, title: String, description: String): Agenda
+		agendaCreate(data: AgendaCreateInput!): Agenda
+		agendaUpdate(id: ID!, data: AgendaUpdateInput!): Agenda
 		agendaDelete(id: ID!): Agenda
 		agendaDeleteAll: Boolean
 	}

@@ -3,6 +3,15 @@ export interface AgendaGetInput {
 }
 
 export interface AgendaCreateInput {
-	title: string;
-	description?: string | null;
+	data: {
+		items: { title: string; description?: string | null }[];
+	};
+}
+
+export interface AgendaUpdateInput {
+	id: string;
+	data: {
+		items: { title: string; description?: string | null }[];
+	};
+	isActive: boolean;
 }
