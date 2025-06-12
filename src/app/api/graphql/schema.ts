@@ -4,13 +4,6 @@ const typeDefs = gql`
 	scalar Date
 	scalar JSON
 
-	# type Error {
-	# 	message: String
-	# 	code: String
-	# 	httpStatus: Int
-	# 	timestamp: Date
-	# }
-
 	type AgendaItem {
 		id: ID
 		title: String!
