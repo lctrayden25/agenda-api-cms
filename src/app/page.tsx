@@ -20,13 +20,13 @@ const agendaList = gql`
 	}
 `;
 
-export default function Home() {
+export default function Login() {
 	const { data } = useQuery(agendaList);
 	console.log({ data });
 	return (
 		<div className="relative min-h-[50dvh] flex flex-col items-center justify-center text-3xl font-bold">
 			<div className="">
-				<h1>Login</h1>
+				<h1>testing</h1>
 				<div>
 					<form></form>
 				</div>

@@ -4,12 +4,7 @@ const typeDefs = gql`
 	scalar Date
 	scalar JSON
 
-	type AgendaItem {
-		id: ID
-		title: String!
-		description: String!
-	}
-
+	# Agenda
 	input AgendaItemInput {
 		title: String!
 		description: String!
@@ -29,6 +24,12 @@ const typeDefs = gql`
 		items: [AgendaItemInput!]
 	}
 
+	type AgendaItem {
+		id: ID
+		title: String!
+		description: String!
+	}
+
 	type Agenda {
 		id: ID!
 		code: String
@@ -40,16 +41,48 @@ const typeDefs = gql`
 		endDate: Date
 	}
 
+	# User
+	input UserCreateInput {
+		username: String!
+		password: String!
+		email: String!
+	}
+
+	input UserUpdateInput {
+		username: String
+		password: String
+		email: String
+	}
+
+	type User {
+		id: ID!
+		username: String!
+		email: String!
+		role: String!
+		createdAt: Date
+		updatedAt: Date
+	}
+
+	# Query
 	type Query {
 		agendaList: [Agenda!]
 		agendaGet(id: ID!): Agenda
+
+		userList: [User!]
+		userGet(id: ID!): User
 	}
 
+	# Mutation
 	type Mutation {
 		agendaCreate(data: AgendaCreateInput!): Agenda
 		agendaUpdate(id: ID!, data: AgendaUpdateInput!): Agenda
 		agendaDelete(id: ID!): Agenda
 		agendaDeleteAll: Boolean
+
+		userCreate(data: UserCreateInput!): User
+		userUpdate(id: ID!, data: UserUpdateInput!): User
+		userDelete(id: ID!): User
+		userDeleteAll: Boolean
 	}
 `;
 

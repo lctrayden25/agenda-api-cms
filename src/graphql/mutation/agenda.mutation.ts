@@ -58,9 +58,10 @@ const agendaMutation = {
 			console.log(error);
 		}
 	},
-	agendaDelete: async (id: string) => {
+	agendaDelete: async (_parent: unknown, args: { id: string }) => {
 		await dbConnect();
 		try {
+			const { id } = args;
 			const data = await Agenda.deleteOne({ id: id });
 			return data;
 		} catch (error) {

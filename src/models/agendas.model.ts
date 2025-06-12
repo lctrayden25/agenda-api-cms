@@ -13,8 +13,8 @@ const agendaSchema = new mongoose.Schema(
 		code: { type: String, required: true, unique: true },
 		isActive: { type: Boolean, default: true },
 		items: [agendaItemSchema],
-		createdAt: { type: Date, default: Date.now },
-		updatedAt: { type: Date, default: Date.now },
+		createdAt: { type: Date, default: () => new Date() },
+		updatedAt: { type: Date, default: () => new Date() },
 	},
 	{ timestamps: false, versionKey: false }
 );
