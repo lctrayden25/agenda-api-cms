@@ -12,7 +12,6 @@ const userQuery = {
 			console.log(error);
 		}
 	},
-
 	userGet: async (_parent: unknown, args: userGetInput) => {
 		await dbConnect();
 		try {

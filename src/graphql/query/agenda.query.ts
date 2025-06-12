@@ -27,6 +27,16 @@ const agendaQuery = {
 			console.log(error);
 		}
 	},
+	agendaGetByCode: async (_parent: unknown, args: { code: string }) => {
+		await dbConnect();
+		try {
+			const { code } = args;
+			const data = await Agenda.findOne({ code: code });
+			return data;
+		} catch (error) {
+			console.log(error);
+		}
+	},
 };
 
 export default agendaQuery;

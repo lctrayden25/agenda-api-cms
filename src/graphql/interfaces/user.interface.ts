@@ -19,3 +19,10 @@ export interface UserUpdateInput {
 		role?: string;
 	};
 }
+
+export interface UserLoginInput {
+	data: {
+		email: string;
+		password: string;
+	};
+}

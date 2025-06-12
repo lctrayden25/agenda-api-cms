@@ -54,6 +54,11 @@ const typeDefs = gql`
 		email: String
 	}
 
+	input UserLoginInput {
+		email: String!
+		password: String!
+	}
+
 	type User {
 		id: ID!
 		username: String!
@@ -67,6 +72,7 @@ const typeDefs = gql`
 	type Query {
 		agendaList: [Agenda!]
 		agendaGet(id: ID!): Agenda
+		agendaGetByCode(code: String!): Agenda
 
 		userList: [User!]
 		userGet(id: ID!): User
@@ -83,6 +89,8 @@ const typeDefs = gql`
 		userUpdate(id: ID!, data: UserUpdateInput!): User
 		userDelete(id: ID!): User
 		userDeleteAll: Boolean
+		userLogin(data: UserLoginInput): User
+		userLogout: Boolean
 	}
 `;
 
