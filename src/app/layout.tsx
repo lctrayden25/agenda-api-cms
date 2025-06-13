@@ -15,7 +15,9 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<ApolloWrapper>
-				<body>{children}</body>
+				<body className="relative min-h-[100dvh] flex flex-col items-center justify-center overflow-x-hidden">
+					{children}
+				</body>
 			</ApolloWrapper>
 		</html>
 	);
