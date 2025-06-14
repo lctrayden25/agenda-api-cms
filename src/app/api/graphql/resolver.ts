@@ -1,5 +1,5 @@
-import { agendaMutation, userMutation } from "@/graphql/mutation";
-import { agendaQuery, userQuery } from "@/graphql/query";
+import { agendaMutation, userMutation } from "@/server/graphql/mutation";
+import { agendaQuery, userQuery } from "@/server/graphql/query";
 
 const resolvers = {
 	Query: {

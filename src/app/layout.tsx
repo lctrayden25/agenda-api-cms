@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import ApolloWrapper from "@/utils/apolloClient";
+import ApolloClientProvider from "@/provider/ApolloClientProvider";
 
 export const metadata: Metadata = {
 	title: "Create Next App",
@@ -14,11 +14,11 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en">
-			<ApolloWrapper>
+			<ApolloClientProvider>
 				<body className="relative min-h-[100dvh] flex flex-col items-center justify-center overflow-x-hidden">
 					{children}
 				</body>
-			</ApolloWrapper>
+			</ApolloClientProvider>
 		</html>
 	);
 }

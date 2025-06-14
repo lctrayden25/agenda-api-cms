@@ -6,8 +6,8 @@ const client = new ApolloClient({
 	cache: new InMemoryCache(),
 });
 
-const ApolloWrapper = ({ children }: { children: React.ReactNode }) => (
+const ApolloClientProvider = ({ children }: { children: React.ReactNode }) => (
 	<ApolloProvider client={client}>{children}</ApolloProvider>
 );
 
-export default ApolloWrapper;
+export default ApolloClientProvider;
