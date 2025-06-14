@@ -1,10 +1,10 @@
-import dbConnect from "@/config/dbConnect";
+import dbConnect from "@/server/config/dbConnect";
 import {
 	UserCreateInput,
 	UserLoginInput,
 	UserUpdateInput,
 } from "../interfaces/user.interface";
-import { User } from "@/models";
+import { User } from "@/server/models";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";

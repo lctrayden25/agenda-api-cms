@@ -1,5 +1,5 @@
-import dbConnect from "@/config/dbConnect";
-import { User } from "@/models";
+import dbConnect from "@/server/config/dbConnect";
+import { User } from "@/server/models";
 import { userGetInput } from "../interfaces/user.interface";
 
 const userQuery = {

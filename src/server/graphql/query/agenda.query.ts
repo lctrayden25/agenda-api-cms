@@ -1,6 +1,6 @@
-import { Agenda } from "@/models";
+import { Agenda } from "@/server/models";
 import { AgendaGetInput } from "../interfaces/agenda.interface";
-import dbConnect from "@/config/dbConnect";
+import dbConnect from "@/server/config/dbConnect";
 
 const agendaQuery = {
 	agendaList: async () => {

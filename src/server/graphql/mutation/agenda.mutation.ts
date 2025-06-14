@@ -1,11 +1,12 @@
-import { Agenda } from "@/models";
 import {
 	AgendaCreateInput,
 	AgendaUpdateInput,
 } from "../interfaces/agenda.interface";
-import dbConnect from "@/config/dbConnect";
+
 import { generateCode } from "@/utils/helper";
 import { GraphQLError } from "graphql";
+import dbConnect from "@/server/config/dbConnect";
+import { Agenda } from "@/server/models";
 
 const agendaMutation = {
 	agendaCreate: async (
