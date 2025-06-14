@@ -1,9 +1,17 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 
-export const middleware = async () => {
-	const cookiesStore = await cookies();
+export const middleware = async (request: Request) => {
+	// Allow introspection queries for codegen
+	const body = await request.clone().text();
+	const isIntrospectionQuery =
+		body.includes("__schema") || body.includes("__type");
 
+	if (isIntrospectionQuery) {
+		return NextResponse.next();
+	}
+
+	const cookiesStore = await cookies();
 	const authToken = cookiesStore.get("authToken");
 
 	if (!authToken) {
@@ -20,4 +28,9 @@ export const middleware = async () => {
 		);
 	}
 	return NextResponse.next();
+};
+
+// Only run middleware on GraphQL API routes
+export const config = {
+	matcher: "/api/graphql",
 };

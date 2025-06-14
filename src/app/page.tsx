@@ -1,13 +1,12 @@
 "use client";
-import InputField from "@/components/form/InputField";
-import SubmitButton from "@/components/form/SubmitButton";
 import { gql, useMutation } from "@apollo/client";
 import { useRouter } from "next/navigation";
-import { useCallback } from "react";
-import { useForm } from "react-hook-form";
+import { useCallback, useState } from "react";
+import { Button, Form, Input, message } from "antd";
+import { UserLoginMutation } from "@/gql/graphql";
 
-const userLogin = gql`
-	mutation UserLogin($data: UserLoginInput) {
+const userLogin = gql(`
+	mutation UserLogin($data: UserLoginInput!) {
 		userLogin(data: $data) {
 			id
 			createdAt
@@ -17,60 +16,97 @@ const userLogin = gql`
 			username
 		}
 	}
-`;
+`);
 
 type LoginFormValues = {
 	email: string;
 	password: string;
 };
+
 export default function Login() {
-	const [login, { data }] = useMutation(userLogin);
+	const [login, { loading }] = useMutation<UserLoginMutation>(userLogin);
+	const [error, setError] = useState<string | null>(null);
 	const router = useRouter();
-	const { register, handleSubmit } = useForm<LoginFormValues>({
-		defaultValues: {
-			email: "",
-			password: "",
-		},
-	});
 
 	const onLogin = useCallback(
 		async (values: LoginFormValues) => {
-			const res = await login({
-				variables: {
-					data: {
-						email: values?.email,
-						password: values?.password,
+			try {
+				setError(null);
+				const res = await login({
+					variables: {
+						data: {
+							email: values.email,
+							password: values.password,
+						},
 					},
-				},
-			});
-			if (res?.data?.userLogin?.id) {
-				router.push("/agendaList");
+				});
+				console.log({ res });
+
+				if (res?.data?.userLogin?.id) {
+					// Store user data in localStorage or your preferred state management
+					localStorage.setItem("user", JSON.stringify(res.data.userLogin));
+					message.success("Login successful!");
+					router.push("/agendaList");
+				}
+			} catch (err) {
+				const error = err as Error;
+				setError(error.message || "Login failed. Please try again.");
+				message.error(error.message || "Login failed. Please try again.");
 			}
 		},
 		[login, router]
 	);
 
 	return (
-		<div className="flex flex-col items-center gap-3 w-full max-w-2xl p-8">
-			<h1>{data?.userLogin?.id ?? "No logged in user"}</h1>
-			<div className="shadow-2xl w-full">
-				<form
-					onSubmit={handleSubmit(onLogin)}
-					className="flex flex-col gap-5 p-8 bg-base-100 shadow-xl"
+		<div
+			style={{
+				padding: "2rem",
+				display: "flex",
+				height: "100dvh",
+				width: "100%",
+			}}
+		>
+			<div style={{ width: "100%", maxWidth: "500px", margin: "auto" }}>
+				<Form
+					onFinish={onLogin}
+					labelCol={{ span: 8 }}
+					style={{
+						width: "100%",
+						display: "flex",
+						flexDirection: "column",
+						padding: "3rem 2rem",
+						boxShadow: "0px 0px 3px #ccc",
+						borderRadius: "10px",
+					}}
 				>
-					<InputField
-						{...register("email")}
-						label="Email"
-						placeholder="Enter email"
-					/>
-					<InputField
-						{...register("password")}
-						label="Password"
-						placeholder="Enter password"
-					/>
+					{error && (
+						<div style={{ color: "red", marginBottom: "1rem" }}>{error}</div>
+					)}
+					<Form.Item
+						name="email"
+						rules={[
+							{ required: true, message: "Please input your email!" },
+							{ type: "email", message: "Please enter a valid email!" },
+						]}
+					>
+						<Input placeholder="Enter email" />
+					</Form.Item>
+					<Form.Item
+						name="password"
+						rules={[{ required: true, message: "Please input your password!" }]}
+					>
+						<Input.Password placeholder="Enter password" />
+					</Form.Item>
 
-					<SubmitButton label="Login" />
-				</form>
+					<Button
+						type="primary"
+						htmlType="submit"
+						loading={loading}
+						style={{ marginTop: "1rem" }}
+					>
+						Login
+					</Button>
+				</Form>
 			</div>
 		</div>
 	);

@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import ApolloClientProvider from "@/provider/ApolloClientProvider";
+import { AntdRegistry } from "@ant-design/nextjs-registry";
+import "@ant-design/v5-patch-for-react-19";
 
 export const metadata: Metadata = {
 	title: "Create Next App",
@@ -15,9 +17,22 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<ApolloClientProvider>
-				<body className="relative min-h-[100dvh] flex flex-col items-center justify-center overflow-x-hidden">
+				{/* <body className="relative min-h-[100dvh] flex flex-col items-center justify-center overflow-x-hidden">
 					{children}
-				</body>
+				</body> */}
+				<AntdRegistry>
+					<body>
+						<div
+							style={{
+								display: "flex",
+								flexDirection: "column",
+								minHeight: "100dvh",
+							}}
+						>
+							{children}
+						</div>
+					</body>
+				</AntdRegistry>
 			</ApolloClientProvider>
 		</html>
 	);

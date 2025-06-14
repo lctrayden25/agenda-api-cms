@@ -10,10 +10,13 @@
 		"generate": "graphql-codegen"
 	},
 	"dependencies": {
+		"@ant-design/nextjs-registry": "^1.0.2",
+		"@ant-design/v5-patch-for-react-19": "^1.0.3",
 		"@apollo/client": "^3.13.8",
 		"@apollo/server": "^4.12.2",
 		"@as-integrations/next": "^3.2.0",
 		"@prisma/client": "^6.9.0",
+		"antd": "^5.26.0",
 		"bcrypt": "^6.0.0",
 		"graphql": "^16.11.0",
 		"graphql-tag": "^2.12.6",
