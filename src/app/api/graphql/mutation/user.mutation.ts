@@ -3,11 +3,13 @@ import {
 	UserCreateInput,
 	UserLoginInput,
 	UserUpdateInput,
-} from "../interfaces/user.interface";
+} from "../interfaces/userArgs.interface";
 import { User } from "@/server/models";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
+import { ApolloServerErrorCode } from "@apollo/server/errors";
+import { GraphQLErrorRes } from "@/server/utils/errors";
 
 const userMutation = {
 	userCreate: async (_parent: unknown, args: UserCreateInput) => {
@@ -18,13 +20,19 @@ const userMutation = {
 
 			const isExist = await User.findOne({ email });
 			if (isExist) {
-				throw new Error("Email already exist");
+				return GraphQLErrorRes(
+					"This email is existed already.",
+					ApolloServerErrorCode.BAD_USER_INPUT
+				);
 			}
 
 			const hashedPassword = await bcrypt.hash(password, 10);
 
 			if (!hashedPassword) {
-				throw new Error("Error hashing password");
+				return GraphQLErrorRes(
+					"Internal server error",
+					ApolloServerErrorCode.BAD_REQUEST
+				);
 			}
 
 			const newUser = await User.create({
@@ -46,7 +54,10 @@ const userMutation = {
 
 			const user = await User.findById(id);
 			if (!user) {
-				throw new Error("User not found");
+				return GraphQLErrorRes(
+					"Invalid user id",
+					ApolloServerErrorCode.BAD_USER_INPUT
+				);
 			}
 
 			const updatedUser = await User.findByIdAndUpdate(
@@ -88,12 +99,19 @@ const userMutation = {
 			const { email, password } = args.data as UserCreateInput["data"];
 			const user = await User.findOne({ email });
 			if (!user) {
-				throw new Error("User not found");
+				return GraphQLErrorRes(
+					"Cannot find user with this email address",
+					ApolloServerErrorCode.BAD_REQUEST
+				);
 			}
 
 			const isMatch = await bcrypt.compare(password, user.password);
+			console.log({ isMatch });
 			if (!isMatch) {
-				throw new Error("Password is incorrect");
+				return GraphQLErrorRes(
+					"Incorrect password",
+					ApolloServerErrorCode.BAD_REQUEST
+				);
 			}
 
 			// create token

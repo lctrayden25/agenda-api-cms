@@ -1,6 +1,6 @@
 import dbConnect from "@/server/config/dbConnect";
 import { User } from "@/server/models";
-import { userGetInput } from "../interfaces/user.interface";
+import { userGetInput } from "../interfaces/userArgs.interface";
 
 const userQuery = {
 	userList: async () => {

@@ -1,12 +1,13 @@
 import {
 	AgendaCreateInput,
 	AgendaUpdateInput,
-} from "../interfaces/agenda.interface";
+} from "../interfaces/agendaArgs.interface";
 
-import { generateCode } from "@/utils/helper";
 import { GraphQLError } from "graphql";
 import dbConnect from "@/server/config/dbConnect";
 import { Agenda } from "@/server/models";
+import { GraphQLErrorRes } from "@/server/utils/errors";
+import { ApolloServerErrorCode } from "@apollo/server/errors";
 
 const agendaMutation = {
 	agendaCreate: async (
@@ -18,14 +19,19 @@ const agendaMutation = {
 		await dbConnect();
 
 		try {
-			const randomCode = generateCode(7);
-			const { items } = args.data as AgendaCreateInput["data"];
-			console.log({ items });
+			// const randomCode = generateCode(7);
+			const { items, code } = args.data as AgendaCreateInput["data"];
+
+			if (!code) {
+				return GraphQLErrorRes(
+					"Missing code input",
+					ApolloServerErrorCode.BAD_USER_INPUT
+				);
+			}
 			const data = await Agenda.insertOne({
 				items,
-				code: randomCode,
+				code: code,
 			});
-			console.log({ data });
 
 			return data;
 		} catch (error) {
@@ -35,7 +41,11 @@ const agendaMutation = {
 	agendaUpdate: async (_parent: unknown, args: AgendaUpdateInput) => {
 		await dbConnect();
 		try {
-			const { id, data, isActive } = args as AgendaUpdateInput;
+			const {
+				id,
+				data: { items },
+				isActive,
+			} = args as AgendaUpdateInput;
 			const isExist = await Agenda.findOne({ _id: id });
 
 			if (!isExist) {
@@ -50,7 +60,7 @@ const agendaMutation = {
 			console.log({ isExist: JSON.stringify(isExist, null, 2) });
 			const result = await Agenda.findByIdAndUpdate(
 				{ _id: id },
-				{ $set: { items: data?.items, isActive, updatedAt: Date.now() } },
+				{ $set: { items, isActive, updatedAt: Date.now() } },
 				{ upsert: false }
 			);
 

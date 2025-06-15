@@ -31,6 +31,7 @@ export type Agenda = {
 };
 
 export type AgendaCreateInput = {
+  code: Scalars['String']['input'];
   endDate?: InputMaybe<Scalars['Date']['input']>;
   isActive?: InputMaybe<Scalars['Boolean']['input']>;
   items?: InputMaybe<Array<AgendaItemInput>>;
@@ -39,12 +40,21 @@ export type AgendaCreateInput = {
 
 export type AgendaItem = {
   __typename?: 'AgendaItem';
-  description: Scalars['String']['output'];
   id?: Maybe<Scalars['ID']['output']>;
-  title: Scalars['String']['output'];
+  session?: Maybe<Array<AgendaSession>>;
 };
 
 export type AgendaItemInput = {
+  session?: InputMaybe<Array<AgendaSessionInput>>;
+};
+
+export type AgendaSession = {
+  __typename?: 'AgendaSession';
+  description: Scalars['String']['output'];
+  title: Scalars['String']['output'];
+};
+
+export type AgendaSessionInput = {
   description: Scalars['String']['input'];
   title: Scalars['String']['input'];
 };
@@ -112,6 +122,7 @@ export type Query = {
   agendaGet?: Maybe<Agenda>;
   agendaGetByCode?: Maybe<Agenda>;
   agendaList?: Maybe<Array<Agenda>>;
+  agendaListCount: Scalars['Int']['output'];
   userGet?: Maybe<User>;
   userList?: Maybe<Array<User>>;
 };
@@ -161,7 +172,7 @@ export type UserUpdateInput = {
 export type AgendaListQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AgendaListQuery = { __typename?: 'Query', agendaList?: Array<{ __typename?: 'Agenda', id: string, code?: string | null, isActive?: boolean | null, createdAt?: any | null, updatedAt?: any | null, startDate?: any | null, endDate?: any | null, items?: Array<{ __typename?: 'AgendaItem', id?: string | null, title: string, description: string }> | null }> | null };
+export type AgendaListQuery = { __typename?: 'Query', agendaList?: Array<{ __typename?: 'Agenda', id: string, code?: string | null, isActive?: boolean | null, createdAt?: any | null, updatedAt?: any | null, startDate?: any | null, endDate?: any | null, items?: Array<{ __typename?: 'AgendaItem', id?: string | null, session?: Array<{ __typename?: 'AgendaSession', title: string, description: string }> | null }> | null }> | null };
 
 export type UserLoginMutationVariables = Exact<{
   data: UserLoginInput;
@@ -170,6 +181,12 @@ export type UserLoginMutationVariables = Exact<{
 
 export type UserLoginMutation = { __typename?: 'Mutation', userLogin?: { __typename?: 'User', id: string, createdAt?: any | null, email: string, role: string, updatedAt?: any | null, username: string } | null };
 
+export type UserLogoutMutationVariables = Exact<{ [key: string]: never; }>;
 
-export const AgendaListDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"AgendaList"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"agendaList"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"isActive"}},{"kind":"Field","name":{"kind":"Name","value":"items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"startDate"}},{"kind":"Field","name":{"kind":"Name","value":"endDate"}}]}}]}}]} as unknown as DocumentNode<AgendaListQuery, AgendaListQueryVariables>;
+
+export type UserLogoutMutation = { __typename?: 'Mutation', userLogout?: boolean | null };
+
+
+export const AgendaListDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"AgendaList"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"agendaList"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"isActive"}},{"kind":"Field","name":{"kind":"Name","value":"items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"session"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"startDate"}},{"kind":"Field","name":{"kind":"Name","value":"endDate"}}]}}]}}]} as unknown as DocumentNode<AgendaListQuery, AgendaListQueryVariables>;
 export const UserLoginDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UserLogin"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"data"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UserLoginInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userLogin"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"data"},"value":{"kind":"Variable","name":{"kind":"Name","value":"data"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"role"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"username"}}]}}]}}]} as unknown as DocumentNode<UserLoginMutation, UserLoginMutationVariables>;
+export const UserLogoutDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UserLogout"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userLogout"}}]}}]} as unknown as DocumentNode<UserLogoutMutation, UserLogoutMutationVariables>;
