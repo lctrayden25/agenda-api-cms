@@ -1,7 +1,7 @@
 export interface AgendaListArgs {
 	limit: number;
 	offset: number;
-	filter: { searchText?: string; isActive: boolean };
+	filter: { searchText?: string; isActive?: boolean };
 }
 
 export interface AgendaGetInput {

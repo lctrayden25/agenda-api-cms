@@ -9,12 +9,9 @@ const agendaQuery = {
 	agendaList: async (_parent: unknown, args: AgendaListArgs) => {
 		await dbConnect();
 		try {
-			const {
-				limit = 10,
-				offset = 0,
-				filter: { searchText = "", isActive },
-			} = args ?? {};
-
+			const { limit = 10, offset = 0, filter } = args ?? {};
+			const { searchText = "", isActive = true } = filter;
+			console.log({ filter });
 			const data = await Agenda.find({
 				$and: [
 					{
@@ -43,26 +40,27 @@ const agendaQuery = {
 	agendaListCount: async (_parent: unknown, args: AgendaListArgs) => {
 		await dbConnect();
 		try {
-			const {
-				limit = 10,
-				offset = 0,
-				filter: { searchText = "", isActive },
-			} = args ?? {};
+			const { limit = 10, offset = 0, filter } = args ?? {};
+			const { searchText = "", isActive = true } = filter;
 			const count = await Agenda.find({
 				$and: [
 					{
-						$or: [{ code: { $regex: searchText, $options: "i" } }],
+						$or: [
+							{
+								code: {
+									$regex: searchText,
+									$options: "i",
+								},
+							},
+						],
 					},
 					{
 						isActive: { $eq: isActive },
 					},
 				],
-			})
-				.skip(offset)
-				.limit(limit)
-				.countDocuments();
+			}).countDocuments();
 
-			return count ?? 0;
+			return count;
 		} catch (error) {
 			console.log(error);
 		}

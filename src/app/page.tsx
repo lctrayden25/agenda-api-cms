@@ -1,7 +1,7 @@
 "use client";
 import { gql, useMutation } from "@apollo/client";
 import { useRouter } from "next/navigation";
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import { Button, Form, Input, message } from "antd";
 import { UserLoginMutation } from "@/gql/graphql";
 
@@ -25,13 +25,11 @@ type LoginFormValues = {
 
 export default function Login() {
 	const [login, { loading }] = useMutation<UserLoginMutation>(userLogin);
-	const [error, setError] = useState<string | null>(null);
 	const router = useRouter();
 
 	const onLogin = useCallback(
 		async (values: LoginFormValues) => {
 			try {
-				setError(null);
 				const res = await login({
 					variables: {
 						data: {
@@ -46,11 +44,10 @@ export default function Login() {
 					// Store user data in localStorage or your preferred state management
 					localStorage.setItem("user", JSON.stringify(res.data.userLogin));
 					message.success("Login successful!");
-					router.push("/agendaList");
+					router.push("/agenda-list");
 				}
 			} catch (err) {
 				const error = err as Error;
-				setError(error.message || "Login failed. Please try again.");
 				message.error(error.message || "Login failed. Please try again.");
 			}
 		},
@@ -79,9 +76,6 @@ export default function Login() {
 						borderRadius: "10px",
 					}}
 				>
-					{error && (
-						<div style={{ color: "red", marginBottom: "1rem" }}>{error}</div>
-					)}
 					<Form.Item
 						name="email"
 						rules={[

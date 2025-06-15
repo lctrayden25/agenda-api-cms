@@ -43,7 +43,7 @@ const agendaTypeDefs = gql`
 
 	type Agenda {
 		id: ID!
-		code: String
+		code: String!
 		isActive: Boolean
 		items: [AgendaItem!]
 		createdAt: Date
