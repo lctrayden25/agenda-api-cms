@@ -1,5 +1,5 @@
 "use client";
-import { Button, Form, Table, TableProps } from "antd";
+import { Affix, Button, Form, Table, TableProps } from "antd";
 import React, { useCallback, useEffect, useState } from "react";
 
 type FormTableProps = {
@@ -12,6 +12,7 @@ type FormTableProps = {
 	loading?: boolean;
 	rowKey?: TableProps["rowKey"];
 	tableProps?: TableProps;
+	extraButtons?: React.ReactNode | null;
 };
 
 type FilterQuery = {
@@ -32,6 +33,7 @@ const FormTable = ({
 	loading = false,
 	tableProps,
 	rowKey,
+	extraButtons,
 }: FormTableProps) => {
 	const [listing, setListing] = useState<unknown[]>([]);
 	const [count, setCount] = useState<number>(0);
@@ -81,10 +83,17 @@ const FormTable = ({
 	}, [fetchCount, fetchList, listingQuery]);
 	return (
 		<Form onFinish={onFinish} form={form}>
-			{children}
-			<Button type="primary" htmlType="submit">
-				Search
-			</Button>
+			<div>
+				{children}
+				<div style={{ display: "flex", justifyContent: "space-between" }}>
+					<Button type="primary" htmlType="submit">
+						Search
+					</Button>
+					{extraButtons && (
+						<div style={{ display: "flex", gap: ".75rem" }}>{extraButtons}</div>
+					)}
+				</div>
+			</div>
 			<div style={{ marginTop: "2rem" }}>
 				<Table
 					rowKey={rowKey}
