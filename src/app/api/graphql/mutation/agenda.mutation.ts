@@ -74,6 +74,13 @@ const agendaMutation = {
 		try {
 			const { id } = args;
 			const data = await Agenda.deleteOne({ id: id });
+			if (!data) {
+				return GraphQLErrorRes(
+					"Agenda not found",
+					ApolloServerErrorCode.BAD_USER_INPUT,
+					404
+				);
+			}
 			return data;
 		} catch (error) {
 			console.log(error);

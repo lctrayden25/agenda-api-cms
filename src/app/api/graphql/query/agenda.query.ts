@@ -4,6 +4,8 @@ import {
 	AgendaListArgs,
 } from "../interfaces/agendaArgs.interface";
 import dbConnect from "@/server/config/dbConnect";
+import { GraphQLErrorRes } from "@/server/utils/errors";
+import { ApolloServerErrorCode } from "@apollo/server/errors";
 
 const agendaQuery = {
 	agendaList: async (_parent: unknown, args: AgendaListArgs) => {
@@ -40,7 +42,7 @@ const agendaQuery = {
 	agendaListCount: async (_parent: unknown, args: AgendaListArgs) => {
 		await dbConnect();
 		try {
-			const { limit = 10, offset = 0, filter } = args ?? {};
+			const { filter } = args ?? {};
 			const { searchText = "", isActive = true } = filter;
 			const count = await Agenda.find({
 				$and: [
@@ -75,6 +77,13 @@ const agendaQuery = {
 		try {
 			const { id } = args;
 			const data = await Agenda.findOne({ _id: id });
+			if (!data) {
+				return GraphQLErrorRes(
+					"Agenda not found",
+					ApolloServerErrorCode.BAD_USER_INPUT,
+					404
+				);
+			}
 			return data;
 		} catch (error) {
 			console.log(error);
@@ -85,6 +94,13 @@ const agendaQuery = {
 		try {
 			const { code } = args;
 			const data = await Agenda.findOne({ code: code });
+			if (!data) {
+				return GraphQLErrorRes(
+					"Agenda not found",
+					ApolloServerErrorCode.BAD_USER_INPUT,
+					404
+				);
+			}
 			return data;
 		} catch (error) {
 			console.log(error);

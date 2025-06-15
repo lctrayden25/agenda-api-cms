@@ -22,7 +22,8 @@ const userMutation = {
 			if (isExist) {
 				return GraphQLErrorRes(
 					"This email is existed already.",
-					ApolloServerErrorCode.BAD_USER_INPUT
+					ApolloServerErrorCode.BAD_USER_INPUT,
+					404
 				);
 			}
 
@@ -31,7 +32,8 @@ const userMutation = {
 			if (!hashedPassword) {
 				return GraphQLErrorRes(
 					"Internal server error",
-					ApolloServerErrorCode.BAD_REQUEST
+					ApolloServerErrorCode.BAD_REQUEST,
+					502
 				);
 			}
 
@@ -56,7 +58,8 @@ const userMutation = {
 			if (!user) {
 				return GraphQLErrorRes(
 					"Invalid user id",
-					ApolloServerErrorCode.BAD_USER_INPUT
+					ApolloServerErrorCode.BAD_USER_INPUT,
+					404
 				);
 			}
 
@@ -74,8 +77,15 @@ const userMutation = {
 		await dbConnect();
 		try {
 			const { id } = args;
-			const deletedUser = await User.findByIdAndDelete(id);
-			return deletedUser;
+			const data = await User.findByIdAndDelete(id);
+			if (!data) {
+				return GraphQLErrorRes(
+					"User not found",
+					ApolloServerErrorCode.BAD_USER_INPUT,
+					404
+				);
+			}
+			return data;
 		} catch (error) {
 			console.log(error);
 		}
@@ -101,7 +111,8 @@ const userMutation = {
 			if (!user) {
 				return GraphQLErrorRes(
 					"Cannot find user with this email address",
-					ApolloServerErrorCode.BAD_REQUEST
+					ApolloServerErrorCode.BAD_REQUEST,
+					400
 				);
 			}
 
@@ -110,7 +121,8 @@ const userMutation = {
 			if (!isMatch) {
 				return GraphQLErrorRes(
 					"Incorrect password",
-					ApolloServerErrorCode.BAD_REQUEST
+					ApolloServerErrorCode.BAD_REQUEST,
+					400
 				);
 			}
 
