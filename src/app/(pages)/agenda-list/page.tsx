@@ -127,21 +127,18 @@ const AgendaListPage: React.FC = () => {
 	];
 
 	return (
-		<Space
-			direction="vertical"
-			style={{
-				width: "100%",
-				background: "#fff",
-				padding: "2rem",
-				height: "100%",
-			}}
-		>
+		<Space style={{ width: "100%" }} direction={"vertical"}>
 			<FormTable
 				rowKey={(record) => record.code.toString()}
 				onFetchList={fetchList as never}
 				onFetchCount={fetchListCount as never}
 				columns={columns as never}
 				loading={listLoading || countLoading}
+				extraButtons={
+					<Button onClick={() => router.push("/agenda-list/create")}>
+						Add New
+					</Button>
+				}
 			>
 				<Form.Item name="searchText">
 					<Input placeholder="Enter code to search..." />
